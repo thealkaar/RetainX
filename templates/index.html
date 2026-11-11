@@ -1,110 +1,343 @@
-<!DOCTYPE html>
-<html >
+<!doctype html>
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <title>Customer Churn Prediction</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08090c">
+  <meta name="description" content="RetainX - E-Commerce Customer Churn Intelligence & AI Retention Copilot">
+  <title>RetainX Enterprise | E-Commerce Churn Intelligence & Retention Copilot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('retainx_theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = saved || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch(e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='retainx.css', v='6') }}">
 </head>
+<body>
+  <div class="ambient-glow glow-1" aria-hidden="true"></div>
+  <div class="ambient-glow glow-2" aria-hidden="true"></div>
 
-<body style="background: black" text="white">
+  <!-- Top Navigation Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-logo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Retain<span class="accent-text">X</span></span>
+          <span class="brand-badge">OLIST E-COMMERCE AI</span>
+        </div>
+      </div>
 
- <div class="login">
-	<center><h1>Customer Churn Prediction</h1></center>
-    <center><h4>Author: Arch Desai</h4></center>
+      <div class="header-status-group">
+        <div class="status-indicator">
+          <span class="pulse-dot"></span>
+          <span class="status-label">Advisor available</span>
+        </div>
+        <div class="status-divider"></div>
+        <div class="model-badge">Olist model</div>
+        <div class="status-divider"></div>
+        
+        <!-- Theme Toggle Button -->
+        <button type="button" class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle visual theme" title="Toggle Light / Dark mode">
+          <svg class="sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
 
-     <!-- Main Input For Receiving Query to our ML -->
-    <form action="{{ url_for('predict')}}"method="post">
+  <!-- Main Dashboard Canvas -->
+  <main class="dashboard-shell">
+    
+    <!-- Hero Header -->
+    <section class="dashboard-hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          CUSTOMER RETENTION · OLIST DATASET
+        </div>
+        <h1>Understand customer retention</h1>
+        <p class="hero-sub">Explore how order, delivery, payment, and review signals relate to repeat purchasing in the Olist marketplace.</p>
+      </div>
 
-    <center>
-      <input type="checkbox" id="SeniorCitizen" name="SeniorCitizen" value=1>
-      <label for="SeniorCitizen"> Senior Citizen</label> &nbsp;&nbsp;&nbsp;
-      <input type="checkbox" id="Partner" name="Partner" value=1>
-      <label for="Partner">Has a partner</label> &nbsp;&nbsp;&nbsp;
-      <input type="checkbox" id="Dependents" name="Dependents" value=1>
-      <label for="Dependents">Has dependents</label>&nbsp;&nbsp;&nbsp;
-      <input type="checkbox" id="PaperlessBilling" name="PaperlessBilling" value=1>
-      <label for="PaperlessBilling">Paperless Billing</label>&nbsp;&nbsp;&nbsp;
-      <input type="checkbox" id="PhoneService" name="PhoneService" value=1>
-      <label for="PhoneService">Phone Service</label>&nbsp;&nbsp;&nbsp;
-      <input type="checkbox" id="MultipleLines" name="MultipleLines" value=1>
-      <label for="MultipleLines">Multiple Lines</label>
-    </center>
-    <br>
+      <!-- Quick Preset Toolbar -->
+      <div class="preset-toolbar">
+        <span class="preset-label">Try a sample:</span>
+        <button type="button" class="preset-btn danger" id="preset-critical" title="Delayed delivery + 1-star negative review">
+          <span class="preset-dot danger"></span> Late delivery · low rating
+        </button>
+        <button type="button" class="preset-btn warning" id="preset-borderline" title="High freight + 3-star mixed review">
+          <span class="preset-dot warning"></span> High freight cost
+        </button>
+        <button type="button" class="preset-btn success" id="preset-healthy" title="Fast delivery + 5-star loyal review">
+          <span class="preset-dot success"></span> Early delivery · 5 stars
+        </button>
+      </div>
+    </section>
 
-    <center>
-      <input type="checkbox" id="OnlineSecurity" name="OnlineSecurity" value=1>
-      <label for="OnlineSecurity">Online Security</label>&nbsp;&nbsp;&nbsp;
-      <input type="checkbox" id="OnlineBackup" name="OnlineBackup" value=1>
-      <label for="OnlineBackup">Online Backup</label>&nbsp;&nbsp;&nbsp;
-      <input type="checkbox" id="DeviceProtection" name="DeviceProtection" value=1>
-      <label for="DeviceProtection">Device Protection</label>&nbsp;&nbsp;&nbsp;
-      <input type="checkbox" id="TechSupport" name="TechSupport" value=1>
-      <label for="TechSupport">Tech Support</label>&nbsp;&nbsp;&nbsp;
-      <input type="checkbox" id="StreamingTV" name="StreamingTV" value=1>
-      <label for="StreamingTV">Streaming TV</label>&nbsp;&nbsp;&nbsp;
-      <input type="checkbox" id="StreamingMovies" name="StreamingMovies" value=1>
-      <label for="StreamingMovies">Streaming Movies</label>
-     </center>
-     <br>
+    <!-- Two-Column Workspace -->
+    <div class="workspace-layout">
 
-    <center>
-      <label for="gender">Gender:</label>
-        <select id="gender" name="gender">
-            <option value=0>Male</option>
-            <option value=1>Female</option>
-        </select> &nbsp;&nbsp;
+      <!-- LEFT COLUMN: Input & Metrics Studio -->
+      <section class="card input-card">
+        <div class="card-header">
+          <div class="header-icon-title">
+            <div class="icon-chip">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+            </div>
+            <div>
+              <h2>Customer history</h2>
+              <p class="card-subtitle">Enter customer history available as of today</p>
+            </div>
+          </div>
+        </div>
 
-      <label for="InternetService">Internet :</label>
-      	<select id="InternetService" name="InternetService">
-        		<option value=0>No</option>
-        		<option value=1>DSL</option>
-              <option value=2>Fiber optic</option>
-        </select> &nbsp;&nbsp;
+        <input type="hidden" id="industry" value="ecommerce">
 
-      <label for="Contract">Contract:</label>
-      	<select id="Contract" name="Contract">
-        		<option value=0>Month-to-Month</option>
-        		<option value=1>One-Year</option>
-              <option value=2>Two-Year</option>
-	      </select>&nbsp;&nbsp;
+        <form id="customer-form" class="telemetry-form">
+          <!-- Customer history inputs for the 90-day churn model -->
+          <div class="industry-fields" data-industry="ecommerce">
+            <div class="grid-2col">
+              <div class="input-group">
+                <label for="days-inactive">Days since last order</label>
+                <div class="input-wrapper"><input type="number" id="days-inactive" name="days_since_last_order" min="0" max="3650" value="30" required><span class="unit-tag">days</span></div>
+                <span class="field-subnote">Churn status begins at 90 days without a purchase.</span>
+              </div>
+              <div class="input-group">
+                <label for="order-count">Orders in customer history</label>
+                <div class="input-wrapper"><input type="number" id="order-count" name="orders_in_history" min="1" max="500" value="1" required><span class="unit-tag">orders</span></div>
+              </div>
+              <div class="input-group">
+                <label for="history-days">Customer history length</label>
+                <div class="input-wrapper"><input type="number" id="history-days" name="days_since_first_order" min="0" max="3650" value="30" required><span class="unit-tag">days</span></div>
+              </div>
+              <div class="input-group">
+                <label for="avg-order-value">Average order value (R$)</label>
+                <div class="input-wrapper"><input type="number" id="avg-order-value" name="average_order_value" min="0" max="100000" value="120" step="any" required><span class="unit-tag">BRL</span></div>
+              </div>
+              <div class="input-group">
+                <label for="avg-review">Average previous review (0 if none)</label>
+                <div class="input-wrapper"><input type="number" id="avg-review" name="average_review_score" min="0" max="5" value="0" step="any" required><span class="unit-tag">/ 5</span></div>
+              </div>
+              <div class="input-group">
+                <label for="avg-delay">Average delivery delay</label>
+                <div class="input-wrapper"><input type="number" id="avg-delay" name="average_delivery_delay_days" min="-365" max="365" value="0" step="any" required><span class="unit-tag">days</span></div>
+              </div>
+            </div>
+          </div>
 
-        <label for="PaymentMethod">Payment:</label>
-        	<select id="PaymentMethod" name="PaymentMethod">
-          		<option value=0>Automatic: Bank Transfer</option>
-          		<option value=1>Automatic: Credit Card</option>
-                <option value=2>Electronic Check</option>
-                <option value=3>Mailed Check</option>
-        	</select>
-      </center>
-<br>
+          <!-- Customer Review & Text Feedback -->
+          <div class="sentiment-box">
+            <div class="sentiment-header">
+              <label for="review-text">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                Customer Review Message <span class="tag-optional">Olist NLP</span>
+              </label>
+            </div>
+            <textarea id="review-text" name="review_text" rows="2" maxlength="2500" placeholder="Enter Portuguese or English review text (e.g. 'O produto atrasou muito e veio quebrado' or 'Adorei, chegou bem antes do prazo!')"></textarea>
+          </div>
 
-<center>
-		<input type="number"  min="0" name="MonthlyCharges" placeholder="Monthly Charges" required="required" />
-<input type="number"  min="0" name="Tenure" placeholder="Tenure in Months" required="required" />
+          <!-- AI Copilot Consent Switch -->
+          <div class="ai-toggle-bar">
+            <div class="ai-toggle-info">
+              <span class="toggle-title">AI service suggestions</span>
+              <span class="toggle-desc">Use the entered order details to draft possible follow-up actions</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="ai-consent" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
 
-</center>
-<br><br>
+          <!-- Submission Action Bar -->
+          <div class="form-footer">
+            <button type="submit" class="cta-button" id="analyze-button">
+              <span class="btn-text">Analyze order</span>
+              <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <div id="industry-hint" class="hint-caption">Olist Brazilian marketplace dataset · 2016–2018</div>
+          </div>
+        </form>
 
-<center>
-<button type="submit" class="btn btn-primary btn-block btn-large" style="height:30px;width:200px">Predict</button>
-</center>
-    </form>
-<br>
-   <center>
+        <div class="error-banner hidden" id="error-message" role="alert"></div>
+      </section>
 
-   {{ prediction_text }}
+      <!-- RIGHT COLUMN: Executive Intelligence & AI Retention Copilot -->
+      <section class="card results-card">
+        
+        <!-- Empty State Preview -->
+        <div class="empty-state" id="empty-result">
+          <div class="empty-icon-ring">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </div>
+          <h3>Your analysis will appear here</h3>
+          <p>Select a preloaded customer scenario above or enter order telemetry, then click <strong>Analyze order</strong>.</p>
+        </div>
 
+        <!-- Populated Prediction Results Container -->
+        <div class="prediction-canvas hidden" id="prediction-result">
+          
+          <!-- Top Risk Score Card -->
+          <div class="risk-overview-card" id="risk-overview-box">
+            <div class="risk-top-row">
+              <div class="risk-metric">
+                <span class="metric-caption">90-DAY CHURN MODEL SCORE</span>
+                <div class="metric-value-row">
+                  <span class="score-number" id="risk-number">0.0</span>
+                  <span class="score-percent">%</span>
+                </div>
+              </div>
+              <div class="badge-wrap">
+                <div class="risk-tag" id="risk-badge">Analyzing</div>
+                <div class="threshold-caption" id="target-definition">Classification model threshold</div>
+              </div>
+            </div>
 
-  <br>
-  <br>
-  <img src="data:image/png;base64,{{url_3}}" alt="Submit Form" height="180" width="233" onerror="this.style.display='none'"/>
-  <img src="data:image/png;base64,{{url_1}}" alt="Submit Form" height="180" width="233" onerror="this.style.display='none'"/>
-  <img src="data:image/png;base64,{{url_4}}" alt="Submit Form" height="180" width="233" onerror="this.style.display='none'"/>
-  <br>
-  <br>
-  <img src="data:image/png;base64,{{url_2}}" alt="Submit Form" height="150" width="711" onerror="this.style.display='none'"/>
-  </center>
- </div>
+            <!-- Dynamic Gauge / Progress Track -->
+            <div class="progress-meter">
+              <div class="progress-fill" id="risk-track"></div>
+            </div>
+            <div class="risk-caveat-text">Churn is operationally defined as no repeat purchase within 90 days; the score is an estimate, not certainty.</div>
 
+            <!-- Sentiment Chip if available -->
+            <div class="sentiment-pill-box hidden" id="review-signal"></div>
+          </div>
 
+          <!-- Feature Attribution Breakdown -->
+          <div class="attribution-card">
+            <div class="attribution-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+              <span>Why the model estimates this risk (feature contributions)</span>
+            </div>
+            <ul class="evidence-grid" id="evidence-list"></ul>
+          </div>
+
+          <!-- Model Telemetry Quality -->
+          <div class="model-meta-box" id="model-quality"></div>
+
+          <!-- AI Retention Playbook Card (Powered by Gemini + RAG) -->
+          <div class="ai-playbook-card" id="recommendation-card">
+            <div class="playbook-header">
+              <div class="playbook-title-group">
+                <div class="sparkle-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 id="recommendation-provider">Suggested follow-up</h3>
+                  <span class="playbook-subtitle">What the data says, why it matters, and what to do next</span>
+                </div>
+              </div>
+            </div>
+            <div class="playbook-body" id="recommendation-text">
+              Generating retention strategy briefing...
+            </div>
+          </div>
+
+          <!-- Interactive AI Copilot Chat -->
+          <div class="copilot-panel">
+            <div class="copilot-header">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+              <span>Ask a follow-up question</span>
+            </div>
+
+            <!-- Quick Action Prompts -->
+            <div class="prompt-chips">
+              <button type="button" class="chip-btn" data-prompt="Draft a personalized service apology email in English offering compensation for the delivery delay">
+                ✉️ Apology & Compensation Email
+              </button>
+              <button type="button" class="chip-btn" data-prompt="What discount or free shipping voucher should we offer to secure their second order?">
+                🏷️ Voucher & Discount Strategy
+              </button>
+              <button type="button" class="chip-btn" data-prompt="Translate and summarize this customer's Portuguese review complaint for our customer success team">
+                🇧🇷 Translate Review & Root Cause
+              </button>
+            </div>
+
+            <div class="chat-thread" id="chat-messages">
+              <div class="chat-empty">Ask any follow-up question regarding this customer's churn signals, delivery delays, or intervention strategy.</div>
+            </div>
+
+            <form id="chat-form" class="copilot-form">
+              <input id="chat-input" type="text" maxlength="1200" placeholder="Ask AI Copilot (e.g. 'How should we address their 1-star delivery complaint?')" autocomplete="off" disabled>
+              <button type="submit" id="chat-submit" class="chat-send-btn" disabled aria-label="Send query">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Clean Enterprise Footer -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        <span>RetainX Enterprise · Olist E-Commerce Retention Intelligence</span>
+        <span class="footer-dot">•</span>
+        <span>Churn score and review signals</span>
+      </div>
+      <div class="footer-right">
+        <span>Olist dataset · Brazil</span>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    window.RETAINX_CONFIG = {
+      models: {{ model_availability|tojson }},
+      aiConfigured: {{ ai_configured|tojson }}
+    };
+  </script>
+  <script src="{{ url_for('static', filename='retainx.js', v='7') }}" defer></script>
 </body>
 </html>
+
